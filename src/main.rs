@@ -2,7 +2,7 @@ use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use std::time::{Instant, Duration};
 
-const PROCESS_NAME: &str = "vb-rec-v2";
+const PROCESS_NAME: &str = "main.exe";
 const REPLACE_WITH_STABLE_VERSION_FREQ: u32 = 3;
 const REPLACE_WITH_STABLE_VERSION_DURATION: Duration = Duration::from_secs(3600 * 24);
 
@@ -44,11 +44,11 @@ fn main() {
 
         println!("VB-Updater: Starting {PROCESS_NAME}\n");
 
-        let mut output = Command::new(format!("/home/raahim/Dev/vb-rec-v2/src/{PROCESS_NAME}"))
+        let mut output = Command::new(format!("C:\\Users\\Administrator\\Desktop\\Dev\\vb-rec-v2-personal\\src\\main.exe"))
             .stdout(Stdio::piped())
             .spawn()
             .expect("failed to execute process");
-      
+            
         let stdout = output.stdout.as_mut().unwrap();
         let stdout_reader = BufReader::new(stdout);
         let stdout_lines = stdout_reader.lines();
@@ -59,6 +59,7 @@ fn main() {
             println!("{}", line);
 
             if line == "RECORDER_RESTART_REQUESTED" {
+                output.kill();
                 println!("\nVB-Updater: RECORDER_RESTART_REQUESTED - Restarting VB-Recorder\n");
             } else if line == "RECORDER_STOP_REQUESTED" {
                 println!("\nVB-Updater: RECORDER_STOP_REQUESTED - Stopping VB-Recorder\n");
